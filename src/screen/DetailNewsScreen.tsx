@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView, Linking, TouchableOpacity } from 'react-native';
 import HeaderComponent from '../components/HeaderComponent';
 import { useRoute } from '@react-navigation/native';
 
@@ -22,17 +22,24 @@ const DetailScreen = () => {
   };
 
   const uri = newsData?.enclosure?.link.split("?");
+  const handleOpenLink = () => {
+    Linking.openURL(newsData.link);
+  };
 
   return (
     <ScrollView style={styles.container}>
       <HeaderComponent title="Detail News" />
-      <Image source={{ uri:  uri[0]}} style={styles.image} />
+      <Image source={{ uri: uri[0] }} style={styles.image} />
       <View style={styles.contentContainer}>
         <Text style={styles.title}>{newsData.title}</Text>
         <Text style={styles.author}>{`Author: ${newsData.author}`}</Text>
         <Text style={styles.pubDate}>{`Published Date: ${newsData.pubDate}`}</Text>
         <Text style={styles.description}>{newsData.description}</Text>
         <Text style={styles.content}>{newsData.content}</Text>
+        <Text style={styles.categories}>{`Categories: ${newsData.categories.join(', ')}`}</Text>
+        <TouchableOpacity onPress={handleOpenLink}>
+          <Text style={styles.source}>{`Source: ${newsData.link}`}</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -70,6 +77,15 @@ const styles = StyleSheet.create({
   },
   content: {
     fontSize: 16,
+  },
+  categories: {
+    fontSize: 16,
+    marginTop: 10,
+  },
+  source: {
+    fontSize: 16,
+    marginTop: 5,
+    color: 'blue', // Add styling for links
   },
 });
 
